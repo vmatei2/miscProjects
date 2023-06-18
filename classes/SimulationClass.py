@@ -5,6 +5,7 @@ from classes.InvestorTypes import InvestorTypes
 from classes.MarketEnvironment import MarketEnvironment
 from classes.Trader import Trader
 from classes.helpers import select_closing_prices, get_price_history
+import seaborn as sns
 
 
 class SimulationClass:
@@ -17,7 +18,7 @@ class SimulationClass:
     def create_agents(self):
         agents = {}
         investor_type = [InvestorTypes.SHORT_TERM, InvestorTypes.LONGTERM]
-        investor_type_probabilities = [0.5, 0.5]
+        investor_type_probabilities = [0.6, 0.4]
         for i in range(self.N_agents):
             agent = Trader(id=i, investorType=random.choices(investor_type, investor_type_probabilities)[0])
             agents[i] = agent
@@ -45,9 +46,11 @@ def setup_env(ticker, start_date_history, end_date_history, time_steps, N_agents
     market_environment = MarketEnvironment(initial_price=last_price, name="Test Market",
                                            start_date=datetime.datetime.strptime(end_date_history, "%Y-%m-%d"), price_history=price_history)
     simulation = SimulationClass(time_steps=time_steps, N_agents=N_agents, market_environment=market_environment)
-    return simulation
+    return simulation, market_environment
 
 
 if __name__ == '__main__':
-    simulation = setup_env("AAPL", "2020-11-15", "2020-12-15", 1000, 5000)
+    sns.set_style("darkgrid")
+    simulation, market_environment = setup_env("AAPL", "2020-11-15", "2020-12-15", 365, 5000)
     simulation.run_simulation()
+    market_environment.plot_price_history()

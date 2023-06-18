@@ -7,7 +7,7 @@ class Trader():
     def __init__(self, id, investorType=None):
         self.demand = 0
         self.b = random.uniform(-1, 1)  # gives the strength of the force calculated as simply (current price - moving_average)
-        self.fundamental_price = random.uniform(100, 200)
+        self.fundamental_price = random.randint(115, 120)
         self.id = id
         self.investorType = investorType
 
@@ -20,11 +20,11 @@ class Trader():
 
     def update_demand(self, expected_price, current_price):
         if expected_price > current_price:
-            self.demand += 0.5
+            self.demand += 0.01
         elif expected_price == current_price:
             pass
         else:
-            self.demand -= 0.5
+            self.demand -= 0.01
 
     def compute_price_expectation_chartist(self, current_price, price_history, white_noise):
         """
